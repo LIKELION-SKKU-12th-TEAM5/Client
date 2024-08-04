@@ -22,9 +22,7 @@ export default function Login( {} ) {
 
         const data = await response.json();
         if (response.ok) {
-            // Handle successful login (e.g., redirect or update state)
-            alert('Login successful!');
-            setTimeout(() => router.push('/'), 2000);
+            setTimeout(() => router.push('/'), 500);
         } else {
             setError(data.error || 'Login failed');
         }

@@ -22,6 +22,7 @@
       }
     ],
     "baseUrl": "./app",
+    "noUncheckedIndexedAccess": true
   },
   "include": [
     "next-env.d.ts",

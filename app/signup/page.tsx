@@ -26,7 +26,7 @@ export default function SignupForm() {
         if (response.ok) {
             setSuccess('Signup successful! You can now log in.');
             // Redirect to login page after successful signup
-            setTimeout(() => router.push('/login'), 2000); // Redirect after 2 seconds
+            setTimeout(() => router.push('/login'), 500); // Redirect after 2 seconds
         } else {
             setError(data.error || 'Signup failed');
         }

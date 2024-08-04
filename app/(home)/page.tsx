@@ -1,16 +1,19 @@
+// app/(home)/page.tsx
 "use client";
 
 import Link from "next/link";
-import './style.css';
-import Input from '../../components/input';
+import "./style.css";
+import Input from "../../components/input";
 import ChatSpace from "../../components/chatspace";
 import Conv from "../../components/conv";
 import { useState, useEffect } from "react";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 export default function home() {
 	// 화면에 띄울 챗 배열
-	const [messages, setMessages] = useState(['chat1']);
+	const [category, setCategory] = useState('청년');
+	const greetMsg = `안녕하세요! ${category} 상담 도우미 입니다! 무엇을 도와드릴까요?`
+	const [messages, setMessages] = useState([greetMsg]);
 	// 유저 정보
 	const [uuid, setUuid] = useState();
 	const [email, setEmail] = useState();
@@ -129,13 +132,21 @@ export default function home() {
 
 	}, []);
 
-
+	// 로그아웃
+	const logoutHandler = () => {
+		Cookies.remove('authToken');
+		setUuid(null);
+		setEmail(null);
+		setUsername(null);
+		setCuids([]);
+		setIsLogin(false);
+	};
 
 	// 기존 대화 버튼 클릭 시 해당 대화로 이동(== 해당 채팅 내역 로드)
-	const reloadConv = async ( cuid ) => {
-		const response = await fetch(`/api/conv?cuid=${cuid}`, {method: 'GET'});
+	const reloadConv = async (cuid) => {
+		const response = await fetch(`/api/conv?cuid=${cuid}`, { method: 'GET' });
 		const data = await response.json();
-		console.log(data);
+
 		setMessages(data.contents);
 	}
 
@@ -158,36 +169,36 @@ export default function home() {
 							<img className="vector-24" src="./assets/vectors/Vector6_x2.svg" />
 						</div>
 						<span className="link-content">
-							홈
+							정책
 						</span>
-						<div className="link-right">
+						<button className="link-right" onClick={() => setCategory('정책')}>
 							<img className="vector-25" src="./assets/vectors/Vector9_x2.svg" />
-						</div>
+						</button>
 					</div>
 					<div className="link">
 						<div className="link-icon-div">
 							<img className="vector" src="./assets/vectors/Vector5_x2.svg" />
 						</div>
 						<span className="link-content">
-							사용자 정보
+							주거
 						</span>
-						<div className="link-right">
+						<button className="link-right" onClick={() => setCategory('주거')}>
 							<img className="vector-1" src="./assets/vectors/Vector3_x2.svg" />
-						</div>
+						</button>
 					</div>
-				</div>
-				<div className="horizontal-border">
 					<div className="link">
 						<div className="link-icon-div">
 							<img className="vector-2" src="./assets/vectors/Vector10_x2.svg" />
 						</div>
 						<span className="link-content">
-							저장 공고
+							진로
 						</span>
-						<div className="link-right">
+						<button className="link-right" onClick={() => setCategory('진로')}>
 							<img className="vector-3" src="./assets/vectors/Vector4_x2.svg" />
-						</div>
+						</button>
 					</div>
+				</div>
+				<div className="horizontal-border">
 					<div className="link">
 						<div className="link-icon-div">
 							<img className="vector-4" src="./assets/vectors/Vector12_x2.svg" />
@@ -215,15 +226,15 @@ export default function home() {
 				</div>
 				{isLogin ?
 					<div className="link">
-						<div className="link-icon-div">
+						<div className="link-icon-div">  {/* onClick -> 사용자 정보 수정 */}
 							<img className="vector-5" src="./assets/vectors/Vector13_x2.svg" />
 						</div>
 						<div className="germeuny">
 							{username}
 						</div>
-						<div className="link-right">
-							<img className="vector-6" src="./assets/vectors/Vector15_x2.svg" />
-						</div>
+						<button onClick={logoutHandler}>
+							로그아웃
+						</button>
 					</div>
 					:
 					<div>
@@ -234,9 +245,9 @@ export default function home() {
 			</nav>
 
 			<div className="main-container">
-				<ChatSpace className="chat-container" chats={messages} />
+				<ChatSpace className="chat-container" chats={messages} category={category} setMessages={setMessages}/>
 				<Input inputHandler={inputHandler} />
-				<div>자주 찾는 정책 및 지원</div>
+				{/* <div>자주 찾는 정책 및 지원</div>
 				<div className="filter-container">
 					<div className="filter-1">
 						<div className="filter-des-1">
@@ -270,7 +281,7 @@ export default function home() {
 							<img className="vector-18" src="./assets/vectors/Vector7_x2.svg" />
 						</div>
 					</div>
-				</div>
+				</div> */}
 
 			</div>
 		</div >

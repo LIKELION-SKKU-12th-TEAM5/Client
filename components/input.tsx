@@ -4,35 +4,38 @@ import { useState } from 'react';
 import '../app/(home)/style.css';
 
 // 채팅 입력 박스
-export default function Input({inputHandler}) {
+export default function Input({ inputHandler }) {
 	// 채팅 내용
 	const [contents, setContents] = useState("");
+
 	const handleInputChange = (event) => {
 		setContents(event.target.value);
-		console.log(contents);
 	};
 	// 채팅 전송
-	const handleInputKeyDown = (event) => {
+	const handleInputKeyDown = async (event) => {
 		if (event.key === "Enter" && !event.shiftKey) {
 			event.preventDefault();
 			if (contents != "") {
-				inputHandler(contents);
+				const cuid = await inputHandler(contents);
+				console.log(cuid);
+				// // 벡엔드 소통
+				// const res = await sendChatLog(contents, cuid);
 				// input 영역 비우기
 				setContents("");
-				// 벡엔드 소통
-				console.log(contents);
 			};
 		}
 	};
-	const handleSendBtnClick = (event) => {
+	const handleSendBtnClick = async (event) => {
 		if (contents != "") {
-			inputHandler(contents);
+			const cuid = await inputHandler(contents);
+			// // 벡엔드 소통
+			// const res = await sendChatLog(contents, cuid);
 			// input 영역 비우기
 			setContents("");
-			// 벡엔드 소통
-			console.log(contents)
 		}
 	}
+
+
 
 	return (
 		<div className="background-3">
@@ -46,14 +49,14 @@ export default function Input({inputHandler}) {
 			</textarea>
 			{/* 부가 요소 공간 */}
 			<div className="container-12">
-					{/* 채팅 전송 버튼 */}
-					<button className="button" onClick={handleSendBtnClick}>
-						<img className="vector-13" src="./assets/vectors/Vector14_x2.svg" />
-					</button>
-					{/* <div className="button">
+				{/* 채팅 전송 버튼 */}
+				<button className="button" onClick={handleSendBtnClick}>
+					<img className="vector-13" src="./assets/vectors/Vector14_x2.svg" />
+				</button>
+				{/* <div className="button">
 						<img className="vector-13" src="./assets/vectors/Vector14_x2.svg" />
 					</div> */}
-				
+
 			</div>
 		</div>
 	);
