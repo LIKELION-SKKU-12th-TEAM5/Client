@@ -28,7 +28,9 @@ interface QueryResult {
   rows: Array<{
     cuid: number,
     password: string,
-    email: string
+    email: string,
+    cuids: Array<number>,
+    chattitle: string
   }>;
 }
 

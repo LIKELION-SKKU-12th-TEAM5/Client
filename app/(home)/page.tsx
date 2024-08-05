@@ -19,6 +19,7 @@ export default function home() {
 	const [email, setEmail] = useState();
 	const [username, setUsername] = useState();
 	const [cuids, setCuids] = useState([]);
+	const [titles, setTitles] = useState([]);
 	const [currentCuid, setCurrentCuid] = useState();
 
 	// 새로운 대화인지 여부
@@ -26,17 +27,17 @@ export default function home() {
 
 	// Function to create a new conversation
 	const createNewConversation = async () => {
-		console.log(uuid);
+
 		try {
 			const response = await fetch('/api/createConv', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ uuid }), // Pass userId or other necessary data
+				body: JSON.stringify({ uuid, category }), // Pass userId or other necessary data
 			});
 
 			const data = await response.json();
-			console.log(data.cuid);
 			setCuids((prevCuids) => [...(prevCuids || []), data.cuid]); // Ensure prevCuids is an array
+			setTitles((prevTitles) => [...(prevTitles || []), data.title]); // Ensure prevtitles is an array
 			return data.cuid;
 		} catch (error) {
 			console.error('Error creating new conversation:', error);
@@ -62,7 +63,35 @@ export default function home() {
 		return { success: true, data };
 	};
 
+	interface ChatBotResponse {
+		result: string;
+	  }
+
 	const getChatBotMsg = async (userMsg, category) => {
+		let type;
+		switch(category){
+			case "정책":
+				type = 0;
+				break;
+			case "주거":
+				type = 1;
+				break;
+			case "진로":
+				type = 2;
+				break;
+			default:
+				type = null;
+		}
+		const response = await fetch(`https://52.78.80.132/${type}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ data: userMsg }),
+		});		
+		
+		const data: ChatBotResponse = await response.json();
+		return data.result;
 		return `${category} 챗봇의 응답`
 	};
 
@@ -76,11 +105,10 @@ export default function home() {
 
 		if (newConv) {
 			newCuid = await createNewConversation();
-			console.log("New Conversation is started");
 			setNewConv(false);
 			setCurrentCuid(newCuid);
 
-			await sendChatLog(messages[0], newCuid, true); // true : 챗봇
+			await sendChatLog(messages[0].content, newCuid, true); // true : 챗봇
 			await sendChatLog(msg, newCuid, false); // false : 사용자
 			// 백엔드 소통
 			const resMsg = await getChatBotMsg(msg, category);
@@ -124,10 +152,11 @@ export default function home() {
 		const data = await response.json();
 
 		if (response.ok) {
-			setUuid(data.uuid);
-			setEmail(data.email);
-			setUsername(data.username);
-			setCuids(data.cuid);
+			setUuid(data.data.uuid);
+			setEmail(data.data.email);
+			setUsername(data.data.username);
+			setCuids(data.data.cuids);
+			setTitles(data.titles)
 		} else {
 			console.log(data.error);
 		}
@@ -184,7 +213,7 @@ export default function home() {
 					</div>
 				</div>
 				<div className="horizontal-border">
-					<div className="link">
+					<div className="link" onClick={() => setCategory('정책')}>
 						<div className="link-icon-div">
 							<img className="vector-24" src="./assets/vectors/Vector6_x2.svg" />
 						</div>
@@ -196,7 +225,7 @@ export default function home() {
 						</button>
 					</div>
 					<div id="ItemTotal">
-						<div className="link">
+						<div className="link" onClick={() => setCategory('주거')}>
 							<div className="link-icon-div">
 								<img className="vector" src="./assets/vectors/Vector5_x2.svg" />
 							</div>
@@ -207,7 +236,7 @@ export default function home() {
 								<img className="vector-1" src="./assets/vectors/Vector3_x2.svg" />
 							</button>
 						</div>
-						<div className="link">
+						<div className="link" onClick={() => setCategory('진로')}>
 							<div className="link-icon-div">
 								<img className="vector-2" src="./assets/vectors/Vector10_x2.svg" />
 							</div>
@@ -220,32 +249,36 @@ export default function home() {
 						</div>
 					</div>
 				</div>
-				<div className="horizontal-border">
-					<div className="link">
-						<div className="link-icon-div">
-							<img className="vector-4" src="./assets/vectors/Vector12_x2.svg" />
-						</div>
-						<span className="link-content">
-							최근 기록
-						</span>
-						<div className="border">
+				{isLogin ?
+					<div className="horizontal-border">
+						<div className="link">
+							<div className="link-icon-div">
+								<img className="vector-4" src="./assets/vectors/Vector12_x2.svg" />
+							</div>
 							<span className="link-content">
-								편집
+								최근 기록
 							</span>
+							<div className="border">
+								<span className="link-content">
+									편집
+								</span>
+							</div>
 						</div>
-					</div>
-					<ul>
-						{isLogin ?
-							cuids ?
-								cuids.map((conv, index) => (
-									<Conv key={index} cuid={conv} reloadConv={reloadConv} />
-								))
+						<ul>
+							{isLogin ?
+								cuids ?
+									cuids.map((conv, index) => (
+										<Conv key={index} cuid={conv} title={titles[index]} reloadConv={reloadConv} />
+									))
+									:
+									null
 								:
-								null
-							:
-							null}
-					</ul>
-				</div>
+								null}
+						</ul>
+					</div>
+					:
+					null
+				}
 				{isLogin ?
 					<div id='logout'>
 						<div className="link-icon-div">  {/* onClick -> 사용자 정보 수정 */}

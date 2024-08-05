@@ -52,12 +52,21 @@ function verifyToken(token) {
 async function getUserInfo(email) {
     
     try {
-        const result = await query('SELECT uuid, email, userName, cuid FROM users WHERE email = $1', [email]);
-        if (result.rowCount > 0) {
-            return result.rows[0];
-        } else {
+        const result = await query('SELECT uuid, email, userName, cuids FROM users WHERE email = $1', [email]);
+        const res = await query(`SELECT chattitle FROM conv WHERE cuid IN (${result.rows[0].cuids.join(',')})`, []);
+        const titles = res.rows.map((item) => item.chattitle);
+
+        if (result.rowCount === 0) {
             return null;
         }
+
+        const cuids = result.rows[0].cuids;
+        if (!cuids || cuids.length === 0) {
+            return { data: result.rows[0], titles: [] };
+        }
+        console.log(titles);
+        return { data: result.rows[0], titles: titles }
+
     } catch (error) {
         console.error('Error fetching user info:', error);
         throw new Error('Error fetching user info');

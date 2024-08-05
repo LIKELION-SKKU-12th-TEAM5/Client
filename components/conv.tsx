@@ -1,4 +1,4 @@
-export default function Conv({ cuid, reloadConv }) {
+export default function Conv({ cuid, title, reloadConv }) {
     const handleClick = () => {
         reloadConv(cuid);
     };
@@ -6,7 +6,7 @@ export default function Conv({ cuid, reloadConv }) {
     return (
         <li>
             <button onClick={handleClick}>
-                {cuid}
+                {title}
             </button>
         </li>
     );
