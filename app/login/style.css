@@ -1,0 +1,96 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background-color: #8fbaeb; /* 파란색 배경 */
+  }
+
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .login-box {
+    width: 400px; /* 너비 설정 */
+    padding: 20px; /* 패딩 설정 */
+    background-color: white; /* 배경색 설정 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 설정 */
+    border-radius: 8px; /* 둥근 테두리 설정 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+  }
+
+  #login {
+    display: grid;
+    grid-template-rows: 1fr 4fr auto;
+    gap: 10px;
+  }
+  h2 {
+    font-family: 'Roboto', sans-serif; /* 글꼴 설정 */
+    font-size: 28px; /* 글자 크기 설정 */
+    color: #333; /* 글자 색상 설정 */
+    margin: 0; /* 기본 마진 제거 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* 텍스트 그림자 효과 */
+    position: relative; /* 하단 선을 위한 위치 설정 */
+  }
+  
+  h2::after {
+    content: '';
+    display: block;
+    width: 70px; /* 하단 선의 너비 설정 */
+    height: 3px; /* 하단 선의 높이 설정 */
+    background-color: #0056b3; /* 하단 선의 색상 설정 */
+    margin: 10px auto 0; /* 하단 선의 마진 설정 */
+    border-radius: 2px; /* 하단 선의 둥근 테두리 설정 */
+  }
+
+  .input-group {
+    display: grid;
+    grid-template-columns: 0.5fr 5fr;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .icon {  
+    display: flex; /* 플렉스 박스 사용 */
+    align-items: right; /* 수직 정렬 */
+    background-color: #f2f2f2; /* 입력 필드 배경색 */
+    border: 1px solid #ccc; /* 테두리 추가 */
+    border-radius: 4px; /* 둥근 테두리 */
+    padding: 10px; /* 패딩 추가 */
+  }
+
+  .input {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2; /* 입력 필드 배경색 */
+    border-radius: 4px; /* 둥근 테두리 */
+    padding: 10px; /* 패딩 추가 */
+    border: 1px solid #ccc;
+  }
+
+  #button {
+    background-color: #0056b3; /* 기본 배경색 */
+    color: white; /* 기본 텍스트 색상 */
+    padding: 10px; /* 패딩 */
+    border: none; /* 테두리 없음 */
+    border-radius: 4px; /* 둥근 테두리 */
+    cursor: pointer; /* 커서 모양 */
+    font-size: 16px; /* 폰트 크기 */
+    text-transform: uppercase; 
+    width: 100%; 
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .error {
+    color: red; /* 에러 메시지 색상 설정 */
+    margin-top: 10px; /* 에러 메시지 상단 마진 */
+  }
+
+
+
+

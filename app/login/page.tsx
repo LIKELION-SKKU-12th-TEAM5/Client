@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
+import "./style.css";
 export default function Login( {} ) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -29,11 +31,20 @@ export default function Login( {} ) {
     };
 
     return (
+        <div className="login-container">
+            <div className="login-box">
+                <div id = "login">
+                <h2>Login</h2>
+
         <form onSubmit={handleSubmit}>
 
-            <div>
-                <label htmlFor="email">email</label>
-                <input
+            <div className="input-group">
+                <div className = "icon">
+                <FontAwesomeIcon icon={faUser} />
+                </div>
+
+                <input className = "input"
+                    placeholder = "Email"
                     type="text"
                     id="email"
                     value={email}
@@ -41,9 +52,12 @@ export default function Login( {} ) {
                     required
                 />
             </div>
-            <div>
-                <label htmlFor="password">Password</label>
-                <input
+            <div className="input-group">
+                <div className = "icon">
+                <FontAwesomeIcon icon={faLock} />
+                </div>
+                <input className = "input"
+                    placeholder = "Password"
                     type="password"
                     id="password"
                     value={password}
@@ -52,7 +66,10 @@ export default function Login( {} ) {
                 />
             </div>
             {error && <div className="error">{error}</div>}
-            <button type="submit">Login</button>
+            <button  id = "button" type="submit">Login</button>
         </form>
+        </div>
+        </div>
+        </div>
     );
 }
