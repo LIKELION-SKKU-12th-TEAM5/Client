@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 
 
 // Dummy token verification function
-export function verifyToken(token) {
+function verifyToken(token) {
     try {
         // Decode and verify the token
         const decoded = jwt.verify(token, SECRET_KEY);
