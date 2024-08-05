@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faLock, faSignature } from '@fortawesome/free-solid-svg-icons';
+import "./style.css";
 
 export default function SignupForm() {
     const [email, setEmail] = useState('');
@@ -33,10 +36,19 @@ export default function SignupForm() {
     };
 
     return (
+        <div className="login-container">
+            <div className="login-box">
+                <div id = "login">
+                <h2>Sign Up</h2>
+
         <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="email">email</label>
-                <input
+        <div id = "whole">
+            <div className="input-group">
+                <div className = "icon">
+                <FontAwesomeIcon icon={faUser} />
+                </div>
+                <input className = "input"
+                    placeholder = "Email"
                     type="text"
                     id="email"
                     value={email}
@@ -44,9 +56,13 @@ export default function SignupForm() {
                     required
                 />
             </div>
-            <div>
-                <label htmlFor="username">Username</label>
-                <input
+
+            <div className="input-group">
+                <div className = "icon">
+                <FontAwesomeIcon icon={faSignature} />
+                </div>
+                <input className = "input"
+                    placeholder = "Username"
                     type="text"
                     id="username"
                     value={username}
@@ -54,9 +70,13 @@ export default function SignupForm() {
                     required
                 />
             </div>
-            <div>
-                <label htmlFor="password">Password</label>
-                <input
+            
+            <div className="input-group">
+                <div className = "icon">
+                <FontAwesomeIcon icon={faLock} />
+                </div>
+                <input className = "input"
+                    placeholder = "Password"
                     type="password"
                     id="password"
                     value={password}
@@ -64,9 +84,13 @@ export default function SignupForm() {
                     required
                 />
             </div>
+        </div>
             {error && <div className="error">{error}</div>}
             {success && <div className="success">{success}</div>}
-            <button type="submit">Sign Up</button>
+            <button id = "button" type="submit">Sign Up</button>
         </form>
+        </div>
+        </div>
+        </div>
     );
 }
