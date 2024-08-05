@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         }
 
         const newCuid = result.rows[0].cuid;
-        console.log('newCuid', newCuid);
+        
         const updateTitleQuery = `
         UPDATE conv
         SET chattitle = $1
