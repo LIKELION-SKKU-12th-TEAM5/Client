@@ -13,7 +13,7 @@ export default function home() {
 	// 화면에 띄울 챗 배열
 	const [category, setCategory] = useState('정책');
 	const greetMsg = `안녕하세요! ${category} 상담 도우미 입니다! 무엇을 도와드릴까요?`
-	const [messages, setMessages] = useState([{content: greetMsg, side: true}]);
+	const [messages, setMessages] = useState([{ content: greetMsg, side: true }]);
 	// 유저 정보
 	const [uuid, setUuid] = useState();
 	const [email, setEmail] = useState();
@@ -148,6 +148,7 @@ export default function home() {
 		setUsername(null);
 		setCuids([]);
 		setIsLogin(false);
+		setMessages([{ content: greetMsg, side: true }]);
 	};
 
 	// 기존 대화 버튼 클릭 시 해당 대화로 이동(== 해당 채팅 내역 로드)
@@ -156,13 +157,14 @@ export default function home() {
 		setNewConv(false);
 		const response = await fetch(`/api/conv?cuid=${cuid}`, { method: 'GET' });
 		const data = await response.json();
-		
+
 		setMessages(data.contents);
 	}
 
 	// 챗봇 카테고리 클릭 시 -> 채팅 초기화 및 cuid 초기화
 	useEffect(() => {
 		setCurrentCuid(null);
+		setNewConv(true);
 		setMessages([{
 			content: `안녕하세요! ${category} 상담 도우미 입니다! 무엇을 도와드릴까요?`,
 			side: true
@@ -193,27 +195,29 @@ export default function home() {
 							<img className="vector-25" src="./assets/vectors/Vector9_x2.svg" />
 						</button>
 					</div>
-					<div className="link">
-						<div className="link-icon-div">
-							<img className="vector" src="./assets/vectors/Vector5_x2.svg" />
+					<div id="ItemTotal">
+						<div className="link">
+							<div className="link-icon-div">
+								<img className="vector" src="./assets/vectors/Vector5_x2.svg" />
+							</div>
+							<span className="link-content">
+								주거
+							</span>
+							<button className="link-right" onClick={() => setCategory('주거')}>
+								<img className="vector-1" src="./assets/vectors/Vector3_x2.svg" />
+							</button>
 						</div>
-						<span className="link-content">
-							주거
-						</span>
-						<button className="link-right" onClick={() => setCategory('주거')}>
-							<img className="vector-1" src="./assets/vectors/Vector3_x2.svg" />
-						</button>
-					</div>
-					<div className="link">
-						<div className="link-icon-div">
-							<img className="vector-2" src="./assets/vectors/Vector10_x2.svg" />
+						<div className="link">
+							<div className="link-icon-div">
+								<img className="vector-2" src="./assets/vectors/Vector10_x2.svg" />
+							</div>
+							<span className="link-content">
+								진로
+							</span>
+							<button className="link-right" onClick={() => setCategory('진로')}>
+								<img className="vector-3" src="./assets/vectors/Vector4_x2.svg" />
+							</button>
 						</div>
-						<span className="link-content">
-							진로
-						</span>
-						<button className="link-right" onClick={() => setCategory('진로')}>
-							<img className="vector-3" src="./assets/vectors/Vector4_x2.svg" />
-						</button>
 					</div>
 				</div>
 				<div className="horizontal-border">
@@ -243,7 +247,7 @@ export default function home() {
 					</ul>
 				</div>
 				{isLogin ?
-					<div className="link">
+					<div id='logout'>
 						<div className="link-icon-div">  {/* onClick -> 사용자 정보 수정 */}
 							<img className="vector-5" src="./assets/vectors/Vector13_x2.svg" />
 						</div>
@@ -255,9 +259,9 @@ export default function home() {
 						</button>
 					</div>
 					:
-					<div>
-						<Link href='/login'>로그인</Link>
-						<Link href='/signup'>회원가입</Link>
+					<div className="divButton">
+						<Link id="logIn" href='/login'>로그인</Link>
+						<Link id="signUp" href='/signup'>회원가입</Link>
 					</div>
 				}
 			</nav>
