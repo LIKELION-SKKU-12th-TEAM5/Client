@@ -175,6 +175,7 @@ export default function home() {
 							<img className="vector-25" src="./assets/vectors/Vector9_x2.svg" />
 						</button>
 					</div>
+				<div id = "ItemTotal">
 					<div className="link">
 						<div className="link-icon-div">
 							<img className="vector" src="./assets/vectors/Vector5_x2.svg" />
@@ -197,6 +198,7 @@ export default function home() {
 							<img className="vector-3" src="./assets/vectors/Vector4_x2.svg" />
 						</button>
 					</div>
+				</div>
 				</div>
 				<div className="horizontal-border">
 					<div className="link">
@@ -224,8 +226,9 @@ export default function home() {
 							null}
 					</ul>
 				</div>
+				<div className="logout-container">
 				{isLogin ?
-					<div className="link">
+					<div id = "logout">
 						<div className="link-icon-div">  {/* onClick -> 사용자 정보 수정 */}
 							<img className="vector-5" src="./assets/vectors/Vector13_x2.svg" />
 						</div>
@@ -237,11 +240,12 @@ export default function home() {
 						</button>
 					</div>
 					:
-					<div>
-						<Link href='/login'>로그인</Link>
-						<Link href='/signup'>회원가입</Link>
+					<div className = "divButton">
+						<Link id="logIn" href='/login'>로그인</Link>
+						<Link id = "signUp" href='/signup'>회원가입</Link>
 					</div>
 				}
+				</div>
 			</nav>
 
 			<div className="main-container">
