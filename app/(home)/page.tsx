@@ -152,6 +152,8 @@ export default function home() {
 
 	// 기존 대화 버튼 클릭 시 해당 대화로 이동(== 해당 채팅 내역 로드)
 	const reloadConv = async (cuid) => {
+		setCurrentCuid(cuid);
+		setNewConv(false);
 		const response = await fetch(`/api/conv?cuid=${cuid}`, { method: 'GET' });
 		const data = await response.json();
 		

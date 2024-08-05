@@ -860,5 +860,7 @@
   .home .chat-container {
     height: 80%;
     width: 60%;
-    background-color: white;
+    /* background-color: white; */
+    background: linear-gradient(#1A1918, #1A1918), linear-gradient(#FFFFFF, #FFFFFF);
+    overflow-y: auto;
   }

@@ -1,0 +1,57 @@
+ul {
+    /* flex box 생성 */
+    display: flex;
+    flex-direction: column;
+    /* unordered list 기본 스타일 제거(점, 들여쓰기) */
+    list-style: none;
+    padding-left: 0;
+    width: 100%;
+}
+
+.chat-container > li {
+    display: flex;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.user {
+    display: flex;
+    /* 16폰트 브라우저 기준 2px */
+    padding: 0.125rem; 
+    vertical-align: middle;
+    color: black;
+    align-self: flex-end;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.userChatBox {
+    background-color: lightgray;
+    max-width: 60%;
+    min-width: 30%; /* 최소 너비 설정 */
+    border: 2px solid grey;
+    border-radius: 0.5rem;
+    word-wrap: break-word;
+    padding: 10px;
+}
+
+.bot {
+    display: flex;
+    padding: 0.125rem;
+    vertical-align: middle;
+    color: black;
+    align-self: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.botChatBox {
+    background-color: lightgray;
+    max-width: 60%;
+    min-width: 30%; /* 최소 너비 설정 */
+    border: 2px solid grey;
+    border-radius: 0.5rem;
+    word-wrap: break-word;
+    padding: 10px;
+    flex-grow: 0;
+}
