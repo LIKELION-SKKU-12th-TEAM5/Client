@@ -4,10 +4,7 @@ import { query } from '../../../lib/db'; // Adjust the path as needed
 
 export async function POST(req: Request) {
   const { cuid, content, side } = await req.json();
-  console.log('api/chat/post');
-  console.log('cuid', cuid);
-  console.log('content', content);
-  console.log('side', side);
+  
   if (typeof cuid !== 'number' || typeof content !== 'string' || typeof side !== 'boolean') {
     return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
   }

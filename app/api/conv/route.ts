@@ -18,9 +18,9 @@ export async function GET(req: Request) {
 
     try {
         const result = await query(q, [cuid]);
-        const contents = result.rows.map(row => row.content);
+        // const contents = result.rows.map(row => row.content);
         // console.log(contents)
-        return NextResponse.json({contents: contents}, {status: 200});
+        return NextResponse.json({contents: result.rows}, {status: 200});
     } catch (error) {
         console.error('Error fetching chat logs:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

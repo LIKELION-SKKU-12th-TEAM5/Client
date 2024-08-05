@@ -17,9 +17,7 @@ export default function Input({ inputHandler }) {
 			event.preventDefault();
 			if (contents != "") {
 				const cuid = await inputHandler(contents);
-				console.log(cuid);
-				// // 벡엔드 소통
-				// const res = await sendChatLog(contents, cuid);
+			
 				// input 영역 비우기
 				setContents("");
 			};
@@ -28,13 +26,11 @@ export default function Input({ inputHandler }) {
 	const handleSendBtnClick = async (event) => {
 		if (contents != "") {
 			const cuid = await inputHandler(contents);
-			// // 벡엔드 소통
-			// const res = await sendChatLog(contents, cuid);
+			
 			// input 영역 비우기
 			setContents("");
 		}
 	}
-
 
 
 	return (

@@ -11,9 +11,9 @@ import Cookies from "js-cookie";
 
 export default function home() {
 	// 화면에 띄울 챗 배열
-	const [category, setCategory] = useState('청년');
+	const [category, setCategory] = useState('정책');
 	const greetMsg = `안녕하세요! ${category} 상담 도우미 입니다! 무엇을 도와드릴까요?`
-	const [messages, setMessages] = useState([greetMsg]);
+	const [messages, setMessages] = useState([{content: greetMsg, side: true}]);
 	// 유저 정보
 	const [uuid, setUuid] = useState();
 	const [email, setEmail] = useState();
@@ -44,23 +44,7 @@ export default function home() {
 		}
 	};
 
-	const sendChatLog = async (content, cuid) => {
-		// try {
-		//   await fetch('/api/chat', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 	  'Content-Type': 'application/json',
-		// 	},
-		// 	body: JSON.stringify({
-		// 	  cuid: 1, // Replace with actual user ID
-		// 	  content,
-		// 	  side: false, // Adjust according to your requirements
-		// 	}),
-		//   });
-		//   inputHandler(content);
-		// } catch (error) {
-		//   console.error('Error sending chat log:', error);
-		// }
+	const sendChatLog = async (content, cuid, side) => {
 		const response = await fetch('/api/chat', {
 			method: 'POST',
 			headers: {
@@ -69,7 +53,7 @@ export default function home() {
 			body: JSON.stringify({
 				cuid: cuid, // Replace with actual user ID
 				content: content,
-				side: false, // Adjust according to your requirements
+				side: side, // Adjust according to your requirements
 			}),
 		});
 
@@ -78,24 +62,48 @@ export default function home() {
 		return { success: true, data };
 	};
 
+	const getChatBotMsg = async (userMsg, category) => {
+		return `${category} 챗봇의 응답`
+	};
+
 	// input -> inputHandler -> chatspace
 	const inputHandler = async (msg) => {
-		setMessages([...messages, msg]);
-
 		let newCuid;
+		const userMsg = {
+			content: msg,
+			side: false
+		}
 
 		if (newConv) {
 			newCuid = await createNewConversation();
-
+			console.log("New Conversation is started");
 			setNewConv(false);
 			setCurrentCuid(newCuid);
+
+			await sendChatLog(messages[0], newCuid, true); // true : 챗봇
+			await sendChatLog(msg, newCuid, false); // false : 사용자
+			// 백엔드 소통
+			const resMsg = await getChatBotMsg(msg, category);
+			const chatBotMsg = {
+				content: resMsg,
+				side: true
+			}
+
+			setMessages([...messages, userMsg, chatBotMsg]);
+			await sendChatLog(resMsg, newCuid, true);
+		} else {
+			await sendChatLog(msg, currentCuid, false);
+			// 백엔드 소통
+			const resMsg = await getChatBotMsg(msg, category);
+			const chatBotMsg = {
+				content: resMsg,
+				side: true
+			}
+
+			setMessages([...messages, userMsg, chatBotMsg]);
+			await sendChatLog(resMsg, currentCuid, true);
 		}
 
-		if (newCuid) {
-			await sendChatLog(msg, newCuid);
-		} else {
-			await sendChatLog(msg, currentCuid);
-		}
 	};
 
 	// 로그인 여부 판단
@@ -146,10 +154,18 @@ export default function home() {
 	const reloadConv = async (cuid) => {
 		const response = await fetch(`/api/conv?cuid=${cuid}`, { method: 'GET' });
 		const data = await response.json();
-
+		
 		setMessages(data.contents);
 	}
 
+	// 챗봇 카테고리 클릭 시 -> 채팅 초기화 및 cuid 초기화
+	useEffect(() => {
+		setCurrentCuid(null);
+		setMessages([{
+			content: `안녕하세요! ${category} 상담 도우미 입니다! 무엇을 도와드릴까요?`,
+			side: true
+		}]);
+	}, [category]);
 
 	return (
 		<div className="home">
@@ -245,44 +261,8 @@ export default function home() {
 			</nav>
 
 			<div className="main-container">
-				<ChatSpace className="chat-container" chats={messages} category={category} setMessages={setMessages}/>
+				<ChatSpace className="chat-container" chats={messages} category={category} setMessages={setMessages} />
 				<Input inputHandler={inputHandler} />
-				{/* <div>자주 찾는 정책 및 지원</div>
-				<div className="filter-container">
-					<div className="filter-1">
-						<div className="filter-des-1">
-							내가 받을 수 있는<br />
-							지원금/정책 불러오기
-						</div>
-						<div className="filter-icon-1">
-							<img className="vector-17" src="./assets/vectors/Vector8_x2.svg" />
-						</div>
-					</div>
-					<div className="background-6">
-						<div className="container-8">
-							청년 맞춤<br />
-							주거 지원 알아보기
-						</div>
-						<div className="svg-10">
-						</div>
-					</div>
-					<div className="background-7">
-						<div className="container-9">
-							청년 대출 상담받기
-						</div>
-						<div className="svg-11">
-						</div>
-					</div>
-					<div className="background-8">
-						<div className="container-10">
-							청년 건강/교육 지원
-						</div>
-						<div className="svg-12">
-							<img className="vector-18" src="./assets/vectors/Vector7_x2.svg" />
-						</div>
-					</div>
-				</div> */}
-
 			</div>
 		</div >
 	)
