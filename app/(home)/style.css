@@ -1,7 +1,7 @@
 /*맨 왼쪽에 있는 navigation bar 전체 다 바꾸는거 */
 .home .nav-bar {
   border-right: 0.7px solid #61605A;
-  background: #2E2D2B;
+  background: #2b93bd;
   display: flex;
   flex-direction: column;
   padding: 21.7px 0px 26px 0;
