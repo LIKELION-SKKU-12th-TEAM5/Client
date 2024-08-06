@@ -14,11 +14,19 @@ import { faBook, faHouse, faChalkboardUser } from '@fortawesome/free-solid-svg-i
 export default function home() {
 	// 화면에 띄울 챗 배열
 	const [category, setCategory] = useState('정책');
-	const greetMsg = `로그인 후 서비스를 이용해주세요`;
-	const policyMsg = `정책 환영 인사`;
-	const houseMsg = `주거 환영 인사`;
-	const careerMsg = `진로 환영 인사`;
-	const [messages, setMessages] = useState([{ content: greetMsg, side: true }]);
+	const policyMsg = `안녕하세요, 저는 정책 도우미 챗봇입니다. 정책에 대한 다양한 답변을 여러분께 제공해 드릴게요.`;
+	const houseMsg = `안녕하세요, 저는 주거 도우미 챗봇입니다. 주거에 대한 다양한 답변을 여러분께 제공해 드릴게요. 자주 하시는 질문은 다음과 같아요.\n
+- 전세제도
+- 청년주거지원
+- 전세보증보험
+- 전세계약과정`;
+	const careerMsg = `안녕하세요, 저는 진로 도우미 챗봇입니다. 진로에 대한 다양한 답변을 여러분께 제공해 드릴게요. 자주 하시는 질문은 다음과 같아요.\n
+- 현직자 멘토링
+- 해외취업
+- 진로상담
+- 인턴십
+- 자격증`;
+	const [messages, setMessages] = useState([{ content: policyMsg, side: true }]);
 	// 유저 정보
 	const [uuid, setUuid] = useState();
 	const [email, setEmail] = useState();
@@ -45,7 +53,7 @@ export default function home() {
 			});
 
 			const data = await response.json();
-			setConvs((prevConvs) => [...(prevConvs || []), {cuid: data.cuid, title: data.title}]);
+			setConvs((prevConvs) => [...(prevConvs || []), { cuid: data.cuid, title: data.title }]);
 			// setCuids((prevCuids) => [...(prevCuids || []), data.cuid]); // Ensure prevCuids is an array
 			// setTitles((prevTitles) => [...(prevTitles || []), data.title]); // Ensure prevtitles is an array
 			return data.cuid;
@@ -110,6 +118,10 @@ export default function home() {
 			content: msg,
 			side: false
 		}
+		if (!isLogin) {
+			alert("로그인 이후 이용해 주세요");
+			return null;
+		}
 
 		if (newConv) {
 			newCuid = await createNewConversation();
@@ -166,7 +178,7 @@ export default function home() {
 			// setCuids(data.data.cuids);
 			// setTitles(data.titles)
 			data.data.cuids.map((cuid, index) => {
-				setConvs((prevConvs) => [...(prevConvs || []), {cuid: cuid, title: data.titles[index]}]);
+				setConvs((prevConvs) => [...(prevConvs || []), { cuid: cuid, title: data.titles[index] }]);
 			});
 		} else {
 			console.log(data.error);
@@ -177,11 +189,6 @@ export default function home() {
 		const authToken = Cookies.get('authToken');
 		fetchUserInfo(authToken);
 		setIsLogin(!!authToken);
-		if (isLogin) {
-			setMessages([{content: policyMsg, side: true}])
-		} else{
-			setMessages([{content: greetMsg, side: true}])
-		}
 
 	}, []);
 
@@ -195,7 +202,8 @@ export default function home() {
 		// setTitles([])
 		setConvs([]);
 		setIsLogin(false);
-		setMessages([{ content: greetMsg, side: true }]);
+		setMessages([{ content: policyMsg, side: true }]);
+		setCategory("정책");
 	};
 
 	// 기존 대화 버튼 클릭 시 해당 대화로 이동(== 해당 채팅 내역 로드)
@@ -211,7 +219,7 @@ export default function home() {
 	// 챗봇 카테고리 클릭 시 -> 채팅 초기화 및 cuid 초기화
 	useEffect(() => {
 		let msg;
-		switch (category){
+		switch (category) {
 			case "정책":
 				msg = policyMsg;
 				break;
@@ -227,17 +235,7 @@ export default function home() {
 
 		setCurrentCuid(null);
 		setNewConv(true);
-		if (isLogin) {
-			setMessages([{
-				content: msg,
-				side: true
-			}]);
-		} else{
-			setMessages([{
-				content: greetMsg,
-				side: true
-			}])
-		}
+		setMessages([{ content: msg, side: true }]);
 	}, [category]);
 
 	// conv 삭제
@@ -318,7 +316,7 @@ export default function home() {
 							{isLogin ?
 								convs ?
 									convs.map((conv, index) => (
-										<Conv key={index} cuid={conv.cuid} title={conv.title} edit={editConv} reloadConv={reloadConv} removeConv={removeConv}/>
+										<Conv key={index} cuid={conv.cuid} title={conv.title} edit={editConv} reloadConv={reloadConv} removeConv={removeConv} />
 									))
 									:
 									null
@@ -350,8 +348,11 @@ export default function home() {
 			</nav>
 
 			<div className="main-container">
-				<ChatSpace className="chat-container" chats={messages} category={category} setMessages={setMessages} policy={policyMsg} house={houseMsg} career={careerMsg}/>
+				<ChatSpace className="chat-container" chats={messages} category={category} setMessages={setMessages} policy={policyMsg} house={houseMsg} career={careerMsg} />
 				<Input inputHandler={inputHandler} />
+			</div>
+			<div className={'ads'}>
+				<img className={'ad-image'} src="./assets/images/ad.png" alt="광고" />
 			</div>
 		</div >
 	)

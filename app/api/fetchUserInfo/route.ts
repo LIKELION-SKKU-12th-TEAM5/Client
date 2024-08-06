@@ -5,24 +5,24 @@ import jwt from 'jsonwebtoken';
 const SECRET_KEY = process.env.SECRET_KEY;
 
 export async function POST(req: Request) {
-    try{
+    try {
         const { token } = await req.json();
 
         // Example token verification logic
         if (!token) {
             return NextResponse.json({ error: 'Token is required' }, { status: 400 });
         }
-    
+
         // Verify the token (dummy verification for example purposes)
         const isValid = verifyToken(token);
-        
+
         if (!isValid.valid) {
             return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
         }
-    
+
         // Fetch user information based on the token
         const userData = await getUserInfo(isValid.decoded.userEmail);
-    
+
         // Return user data if successful
         if (userData) {
             return NextResponse.json(userData, { status: 200 });
@@ -50,21 +50,24 @@ function verifyToken(token) {
 
 // Real function to get user info
 async function getUserInfo(email) {
-    
+
     try {
         const result = await query('SELECT uuid, email, userName, cuids FROM users WHERE email = $1', [email]);
-        const res = await query(`SELECT chattitle FROM conv WHERE cuid IN (${result.rows[0].cuids.join(',')})`, []);
-        const titles = res.rows.map((item) => item.chattitle);
-
-        if (result.rowCount === 0) {
-            return null;
-        }
 
         const cuids = result.rows[0].cuids;
         if (!cuids || cuids.length === 0) {
             return { data: result.rows[0], titles: [] };
         }
-        
+
+
+        const res = await query(`SELECT chattitle FROM conv WHERE cuid IN (${result.rows[0].cuids.join(',')})`, []);
+        const titles = res.rows.map((item) => item.chattitle);
+
+
+        if (result.rowCount === 0) {
+            return null;
+        }
+
         return { data: result.rows[0], titles: titles }
 
     } catch (error) {

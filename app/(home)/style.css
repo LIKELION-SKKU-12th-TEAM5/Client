@@ -1,7 +1,7 @@
 /*맨 왼쪽에 있는 navigation bar 전체 다 바꾸는거 */
 .home .nav-bar {
   border-right: 0.7px solid #61605A;
-  background: #2E2D2B;
+  background: #2b93bd;
   display: flex;
   flex-direction: column;
   padding: 21.7px 0px 26px 0;
@@ -48,7 +48,6 @@
 /*글자(ex.정책) 서식 */
 .home .nav-bar .link-content {
   flex-grow: 1;
-  font-size: 16px;
   padding: 5px 10px;
   background-color: rgba(0, 0, 0, 0.5);
   /* 불투명 검정 배경 */
@@ -92,7 +91,7 @@
   border-radius: 8px;
   margin: 0 16.7px;
   transition: background-color 0.3s;
-  background: #2E2D2B;
+  background: #2b93bd;
   /* 네비게이션 바와 동일한 배경색 */
 }
 
@@ -161,7 +160,7 @@ s .home .nav-bar .germeuny,
   color: #ffffff;
   /* 텍스트 색상 흰색으로 설정 */
   text-decoration: none;
-  font-size: 14px;
+  font-size: larger;
   /* 폰트 크기 조정 */
   padding: 8px 16px;
   /* 패딩 조정 */
@@ -253,7 +252,7 @@ s .home .nav-bar .germeuny,
   overflow-wrap: break-word;
   font-family: 'Roboto';
   font-weight: 500;
-  font-size: 16px;
+  font-size: larger;
   line-height: 1;
   color: #F0EFEB;
 }
@@ -282,7 +281,7 @@ s .home .nav-bar .germeuny,
   overflow-wrap: break-word;
   font-family: 'Roboto';
   font-weight: 500;
-  font-size: 14px;
+  font-size: x-large;
   line-height: 1;
   color: #A8A69D;
 }
@@ -294,7 +293,7 @@ s .home .nav-bar .germeuny,
   overflow-wrap: break-word;
   font-family: 'Roboto';
   font-weight: 700;
-  font-size: 16px;
+  font-size: x-large;
   line-height: 1.4;
   color: #FFFFFF;
 }
@@ -360,7 +359,7 @@ s .home .nav-bar .germeuny,
   overflow-wrap: break-word;
   font-family: 'Roboto';
   font-weight: 500;
-  font-size: 16px;
+  font-size: x-large;
   line-height: 1.6;
   color: #85837D;
 }
@@ -393,7 +392,7 @@ s .home .nav-bar .germeuny,
 }
 
 .home {
-  background: linear-gradient(#1A1918, #1A1918), linear-gradient(#FFFFFF, #FFFFFF);
+  background-color: #8fbaeb;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -405,7 +404,7 @@ s .home .nav-bar .germeuny,
   overflow-wrap: break-word;
   font-family: 'Roboto';
   font-weight: 500;
-  font-size: 16px;
+  font-size: x-large;
   line-height: 1;
   color: #F0EFEB;
 }
@@ -460,3 +459,14 @@ body {
   background-color: #555555;
   transform: translateY(-2px);
 }
+
+.ads{
+  background-color: #8fbaeb;
+  width: 30%;
+  align-self: center;
+}
+
+.ad-image{
+  height: 600px;
+}
+

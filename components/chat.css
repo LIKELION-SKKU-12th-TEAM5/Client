@@ -37,6 +37,8 @@ ul {
     border-radius: 0.5rem;
     word-wrap: break-word;
     padding: 10px;
+    font-size: large;
+    white-space: pre-wrap;
 }
 
 .bot {
@@ -58,4 +60,6 @@ ul {
     word-wrap: break-word;
     padding: 10px;
     flex-grow: 0;
+    font-size: large;
+    white-space: pre-wrap;
 }
