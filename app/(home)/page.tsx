@@ -86,28 +86,28 @@ export default function home() {
 	}
 
 	const getChatBotMsg = async (userMsg, category) => {
-		// let type;
-		// switch (category) {
-		// 	case "정책":
-		// 		type = 0;
-		// 		break;
-		// 	case "주거":
-		// 		type = 1;
-		// 		break;
-		// 	case "진로":
-		// 		type = 2;
-		// 		break;
-		// 	default:
-		// 		type = null;
-		// }
-		// console.log(type); 2
-		// const response = await fetch(`https://7508-34-16-221-25.ngrok-free.app/${type}`, {
-		// 	method: 'POST',
-		// 	body: JSON.stringify({ data: userMsg }),
-		// });
+		let type;
+		switch (category) {
+			case "정책":
+				type = 0;
+				break;
+			case "주거":
+				type = 1;
+				break;
+			case "진로":
+				type = 2;
+				break;
+			default:
+				type = null;
+		}
+		console.log(type); 2
+		const response = await fetch(`https://7508-34-16-221-25.ngrok-free.app/${type}`, {
+			method: 'POST',
+			body: JSON.stringify({ data: userMsg }),
+		});
 
-		// const data: ChatBotResponse = await response.json();
-		// return data.result;
+		const data: ChatBotResponse = await response.json();
+		return data.result;
 		return `${category} 챗봇의 응답`
 	};
 
@@ -250,7 +250,13 @@ export default function home() {
 				{/* 최상단 */}
 				<div className="container-18">
 					{/* 로고 */}
-					<img className="container-7" src="./assets/vectors/Container_x2.svg" />
+					<div className={"logo-container"}>
+
+						<img className="container-7" src="./assets/images/logo.png" />
+					</div>
+					<div className={"serviceName"}>
+						Guide You
+					</div>
 					{/* nav 바 접기 */}
 					<div className="container-1">
 						<img className="vector-8" src="./assets/vectors/Vector_x2.svg" />
