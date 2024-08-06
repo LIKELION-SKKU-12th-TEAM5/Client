@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import "./style.css";
+
+
 export default function Login( {} ) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

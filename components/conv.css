@@ -1,0 +1,29 @@
+.conv-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.conv-title {
+    background-color: gray;
+    margin-bottom: 1%;
+    width: 50%;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.conv-title:hover {
+    background-color: #555555;
+    transform: translateY(-2px);
+}
+
+.delete{
+    background-color: gray;
+    margin-bottom: 1%;
+    border-radius: 5px;
+    width: 15%;
+}
+
+.delete:hover {
+    background-color: #555555;
+    transform: translateY(-2px);
+}

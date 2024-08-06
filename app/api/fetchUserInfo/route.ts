@@ -64,7 +64,7 @@ async function getUserInfo(email) {
         if (!cuids || cuids.length === 0) {
             return { data: result.rows[0], titles: [] };
         }
-        console.log(titles);
+        
         return { data: result.rows[0], titles: titles }
 
     } catch (error) {

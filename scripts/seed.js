@@ -18,12 +18,13 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) NOT NULL UNIQUE,
     userName VARCHAR(100) NOT NULL,
     password VARCHAR(100) NOT NULL,
-    cuid INTEGER[] DEFAULT '{}'
+    cuids INTEGER[] DEFAULT '{}'
 );
 // convs
 CREATE TABLE IF NOT EXISTS conv (
     cuid SERIAL PRIMARY KEY,
-    chatTitle VARCHAR(60)
+    chattitle VARCHAR(60),
+    category VARCHAR(50)
 );
 // chatlog
 CREATE TABLE IF NOT EXISTS chatlog (

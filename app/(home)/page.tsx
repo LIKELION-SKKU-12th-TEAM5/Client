@@ -8,22 +8,31 @@ import ChatSpace from "../../components/chatspace";
 import Conv from "../../components/conv";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBook, faHouse, faChalkboardUser } from '@fortawesome/free-solid-svg-icons';
 
 export default function home() {
 	// 화면에 띄울 챗 배열
 	const [category, setCategory] = useState('정책');
-	const greetMsg = `안녕하세요! ${category} 상담 도우미 입니다! 무엇을 도와드릴까요?`
+	const greetMsg = `로그인 후 서비스를 이용해주세요`;
+	const policyMsg = `정책 환영 인사`;
+	const houseMsg = `주거 환영 인사`;
+	const careerMsg = `진로 환영 인사`;
 	const [messages, setMessages] = useState([{ content: greetMsg, side: true }]);
 	// 유저 정보
 	const [uuid, setUuid] = useState();
 	const [email, setEmail] = useState();
 	const [username, setUsername] = useState();
-	const [cuids, setCuids] = useState([]);
-	const [titles, setTitles] = useState([]);
+	// const [cuids, setCuids] = useState([]);
+	// const [titles, setTitles] = useState([]);
 	const [currentCuid, setCurrentCuid] = useState();
+	const [convs, setConvs] = useState([])
 
 	// 새로운 대화인지 여부
 	const [newConv, setNewConv] = useState(true);
+
+	// 대화 목록 편집 버튼
+	const [editConv, setEditConv] = useState(false);
 
 	// Function to create a new conversation
 	const createNewConversation = async () => {
@@ -36,8 +45,9 @@ export default function home() {
 			});
 
 			const data = await response.json();
-			setCuids((prevCuids) => [...(prevCuids || []), data.cuid]); // Ensure prevCuids is an array
-			setTitles((prevTitles) => [...(prevTitles || []), data.title]); // Ensure prevtitles is an array
+			setConvs((prevConvs) => [...(prevConvs || []), {cuid: data.cuid, title: data.title}]);
+			// setCuids((prevCuids) => [...(prevCuids || []), data.cuid]); // Ensure prevCuids is an array
+			// setTitles((prevTitles) => [...(prevTitles || []), data.title]); // Ensure prevtitles is an array
 			return data.cuid;
 		} catch (error) {
 			console.error('Error creating new conversation:', error);
@@ -65,33 +75,31 @@ export default function home() {
 
 	interface ChatBotResponse {
 		result: string;
-	  }
+	}
 
 	const getChatBotMsg = async (userMsg, category) => {
-		let type;
-		switch(category){
-			case "정책":
-				type = 0;
-				break;
-			case "주거":
-				type = 1;
-				break;
-			case "진로":
-				type = 2;
-				break;
-			default:
-				type = null;
-		}
-		const response = await fetch(`https://52.78.80.132/${type}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ data: userMsg }),
-		});		
-		
-		const data: ChatBotResponse = await response.json();
-		return data.result;
+		// let type;
+		// switch (category) {
+		// 	case "정책":
+		// 		type = 0;
+		// 		break;
+		// 	case "주거":
+		// 		type = 1;
+		// 		break;
+		// 	case "진로":
+		// 		type = 2;
+		// 		break;
+		// 	default:
+		// 		type = null;
+		// }
+		// console.log(type); 2
+		// const response = await fetch(`https://7508-34-16-221-25.ngrok-free.app/${type}`, {
+		// 	method: 'POST',
+		// 	body: JSON.stringify({ data: userMsg }),
+		// });
+
+		// const data: ChatBotResponse = await response.json();
+		// return data.result;
 		return `${category} 챗봇의 응답`
 	};
 
@@ -155,8 +163,11 @@ export default function home() {
 			setUuid(data.data.uuid);
 			setEmail(data.data.email);
 			setUsername(data.data.username);
-			setCuids(data.data.cuids);
-			setTitles(data.titles)
+			// setCuids(data.data.cuids);
+			// setTitles(data.titles)
+			data.data.cuids.map((cuid, index) => {
+				setConvs((prevConvs) => [...(prevConvs || []), {cuid: cuid, title: data.titles[index]}]);
+			});
 		} else {
 			console.log(data.error);
 		}
@@ -166,6 +177,11 @@ export default function home() {
 		const authToken = Cookies.get('authToken');
 		fetchUserInfo(authToken);
 		setIsLogin(!!authToken);
+		if (isLogin) {
+			setMessages([{content: policyMsg, side: true}])
+		} else{
+			setMessages([{content: greetMsg, side: true}])
+		}
 
 	}, []);
 
@@ -175,7 +191,9 @@ export default function home() {
 		setUuid(null);
 		setEmail(null);
 		setUsername(null);
-		setCuids([]);
+		// setCuids([]);
+		// setTitles([])
+		setConvs([]);
 		setIsLogin(false);
 		setMessages([{ content: greetMsg, side: true }]);
 	};
@@ -192,13 +210,41 @@ export default function home() {
 
 	// 챗봇 카테고리 클릭 시 -> 채팅 초기화 및 cuid 초기화
 	useEffect(() => {
+		let msg;
+		switch (category){
+			case "정책":
+				msg = policyMsg;
+				break;
+			case "주거":
+				msg = houseMsg;
+				break;
+			case "진로":
+				msg = careerMsg;
+				break;
+			default:
+				msg = null;
+		}
+
 		setCurrentCuid(null);
 		setNewConv(true);
-		setMessages([{
-			content: `안녕하세요! ${category} 상담 도우미 입니다! 무엇을 도와드릴까요?`,
-			side: true
-		}]);
+		if (isLogin) {
+			setMessages([{
+				content: msg,
+				side: true
+			}]);
+		} else{
+			setMessages([{
+				content: greetMsg,
+				side: true
+			}])
+		}
 	}, [category]);
+
+	// conv 삭제
+	const removeConv = (cuid) => {
+		// setCuids(prevCuids => prevCuids.filter(conv => conv !== cuid));
+		setConvs(prevConvs => prevConvs.filter(conv => conv.cuid !== cuid));
+	}
 
 	return (
 		<div className="home">
@@ -215,7 +261,9 @@ export default function home() {
 				<div className="horizontal-border">
 					<div className="link" onClick={() => setCategory('정책')}>
 						<div className="link-icon-div">
-							<img className="vector-24" src="./assets/vectors/Vector6_x2.svg" />
+							<FontAwesomeIcon icon={faBook} />
+							{/* <i className="fa-solid fa-book"></i> */}
+							{/* <img className="vector-24" src="./assets/vectors/Vector6_x2.svg" /> */}
 						</div>
 						<span className="link-content">
 							정책
@@ -227,7 +275,8 @@ export default function home() {
 					<div id="ItemTotal">
 						<div className="link" onClick={() => setCategory('주거')}>
 							<div className="link-icon-div">
-								<img className="vector" src="./assets/vectors/Vector5_x2.svg" />
+								<FontAwesomeIcon icon={faHouse} />
+								{/* <img className="vector" src="./assets/vectors/Vector5_x2.svg" /> */}
 							</div>
 							<span className="link-content">
 								주거
@@ -238,7 +287,8 @@ export default function home() {
 						</div>
 						<div className="link" onClick={() => setCategory('진로')}>
 							<div className="link-icon-div">
-								<img className="vector-2" src="./assets/vectors/Vector10_x2.svg" />
+								<FontAwesomeIcon icon={faChalkboardUser} />
+								{/* <img className="vector-2" src="./assets/vectors/Vector10_x2.svg" /> */}
 							</div>
 							<span className="link-content">
 								진로
@@ -259,16 +309,16 @@ export default function home() {
 								최근 기록
 							</span>
 							<div className="border">
-								<span className="link-content">
+								<span className="link-content" onClick={() => { setEditConv(prev => !prev) }}>
 									편집
 								</span>
 							</div>
 						</div>
-						<ul>
+						<ul className={"conv-list"}>
 							{isLogin ?
-								cuids ?
-									cuids.map((conv, index) => (
-										<Conv key={index} cuid={conv} title={titles[index]} reloadConv={reloadConv} />
+								convs ?
+									convs.map((conv, index) => (
+										<Conv key={index} cuid={conv.cuid} title={conv.title} edit={editConv} reloadConv={reloadConv} removeConv={removeConv}/>
 									))
 									:
 									null
@@ -300,7 +350,7 @@ export default function home() {
 			</nav>
 
 			<div className="main-container">
-				<ChatSpace className="chat-container" chats={messages} category={category} setMessages={setMessages} />
+				<ChatSpace className="chat-container" chats={messages} category={category} setMessages={setMessages} policy={policyMsg} house={houseMsg} career={careerMsg}/>
 				<Input inputHandler={inputHandler} />
 			</div>
 		</div >
